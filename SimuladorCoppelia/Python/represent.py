@@ -1,6 +1,15 @@
 from processing_py import *
 import numpy as np
-#import asyncio
+import socket
+import json
+import time
+
+serverAddressPort   = ("localhost", 20000)
+UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+UDPClientSocket.bind(("localhost", 19999))
+
+Ball = [0, 0]
+Robots = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
 def pol2cart(rho, phi):
     x = rho * np.cos(phi)
@@ -47,3 +56,21 @@ class Draw:
         self.app.ellipse((Ball[0]*10+self.WIDTH/2)*self.SCALE,(-Ball[1]*10+self.HEIGHT/2)*self.SCALE,3*self.SCALE,3*self.SCALE)
         self.app.stroke(0, 0, 0)
 
+'''
+App = Draw(3)
+
+while 1:
+    message = UDPClientSocket.recvfrom(1024)
+    ToDraw = eval(message[0].decode())
+    Robots = ToDraw['Robots']
+    Ball = ToDraw['Ball']
+
+    tempo = time.time()
+    App.Background()
+    for Robot in Robots:
+        App.Robot(Robot)
+    App.Ball(Ball)
+    App.reDraw()
+    print(int((time.time()-tempo)*1000), "ms")
+
+'''
